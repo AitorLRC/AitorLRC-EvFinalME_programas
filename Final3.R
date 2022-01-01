@@ -3,7 +3,7 @@ library(RcmdrMisc)
 ####################
 #Lectura del fichero
 ####################
-setwd("C:/Users/aitor/Desktop/EvFinalME")
+setwd("C:/Users/aitor/Desktop/EvFinalME/AitorLRC-EvFinalME_programas/")
 
 load("Auto.RData")
 
@@ -36,6 +36,8 @@ correlationM <- cor(Auto1[, c('long', 'ancho', 'alto', 'peso', 'cilindrada', 'po
 correlationM[, 'kmpl']
 #Salvo alto y rpm todas tienen una correlación alta lo que indica a que están relacionadas con el consumo
 
+reg.1 <- glm(kmpl~1)
+
 reg.puertas <- glm(kmpl~n.puertas.factor); reg.puertas
 anova(reg.1,reg.puertas,test="Chisq") #0.7 por lo que el número de puertas no es significativo, no está relacionado
 
@@ -65,19 +67,13 @@ reg.rpm <- glm(kmpl~rpm); summary(reg.rpm)
 anova(reg.rpm,test="Chisq") #mayor, no relacionada
 
 
-#TABLAS DE CONTINGENCIA
+#RESUMEN POR GRUPOS
 
-local({
-  .Table <- xtabs(~ev+familia, data=EV1)
-  cat("\nFrequency table:\n")
-  print(.Table)
-  .Test <- chisq.test(.Table, correct=FALSE)
-  print(.Test)
-})
-with(EV1, Barplot(familia, by=ev, style="divided", legend.pos="above", xlab="familia", ylab="Frequency", label.bars=TRUE))
-#
+numSummary(kmpl, groups = n.puertas.factor)
+Boxplot(kmpl~n.puertas.factor, data=Auto1, id=list(method="y"))
 
-
+numSummary(kmpl, groups =compresion.factor )
+Boxplot(kmpl~compresion.factor, data=Auto1, id=list(method="y"))
 
 
 ###############
