@@ -65,6 +65,20 @@ reg.rpm <- glm(kmpl~rpm); summary(reg.rpm)
 anova(reg.rpm,test="Chisq") #mayor, no relacionada
 
 
+#TABLAS DE CONTINGENCIA
+
+local({
+  .Table <- xtabs(~ev+familia, data=EV1)
+  cat("\nFrequency table:\n")
+  print(.Table)
+  .Test <- chisq.test(.Table, correct=FALSE)
+  print(.Test)
+})
+with(EV1, Barplot(familia, by=ev, style="divided", legend.pos="above", xlab="familia", ylab="Frequency", label.bars=TRUE))
+#
+
+
+
 
 ###############
 #Construye un modelo que permita predecir el recorrido
